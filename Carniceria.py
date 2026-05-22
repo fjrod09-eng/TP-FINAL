@@ -29,3 +29,4 @@ class Carniceria(Producto_por_kilo):
 
             print(
                 f"- Sector: {self.__sector}\n - Tipo de corte: {self.__tipo_de_corte}\n- Precio por kg: ${self.get_precio()}\n- Peso real: {self.get_peso()} kg\n- Precio final: ${self.calcular_precio()}")
+            

@@ -63,14 +63,11 @@ class Inventario():
         
         for i in self.productos:
             if i.get_codigo()==codigo:
-                print(f"Producto encontrado:{i.get_nombre_producto()}")
-                print(f"Stock en gondola: {i.get_stock_gondola()}")
-                print(f"Precio:{i.get_precio()}")
-                print(f"Umbral minimo: {i.get_umbral_minimo()}")
                 
-                return 
+                return i
             
         print("Producto no encontrado")
+        return None
 
                 
         
