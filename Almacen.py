@@ -19,19 +19,19 @@ class Almacen:
         precio_final=0
         for i in carrito:
             precio_final+=i.get_precio()
-            return precio_final
+        return precio_final
         
     def precio_final_con_promos(self,carrito):
 
         for i in carrito:
             if i.get_sector()=="Galletitas":
-                self.cantidad_productos.append[i.codigo]+=1
+                self.cantidad_productos[i.get_codigo()]+=1
 
             if i.get_sector()=="Gaseosas":
-                self.cantidad_productos.append[i.codigo]+=1
+                self.cantidad_productos[i.get_codigo()]+=1
             
             if i.get_sector()=="Perfumeria":
-                self.cantidad_productos.append[i.codigo]+=1
+                self.cantidad_productos[i.get_codigo()]+=1
             
             
 
@@ -59,16 +59,16 @@ class Almacen:
         manaos=self.cantidad_productos["006"]
 
         if coca%2==0:
-            preciosdescuento4=(coca/2)*3000*0.30
+            preciodescuento4=(coca/2)*3000*0.30
         else:
             preciodescuento4=((coca-1)/2)*3000*0.30
         
         if sprite%2==0:
-            preciosdescuento5=(sprite/2)*3000*0.30
+            preciodescuento5=(sprite/2)*3000*0.30
         else:
             preciodescuento5=((sprite-1)/2)*3000*0.30
         if manaos%2==0:
-            preciosdescuento6=(manaos/2)*1000*0.30
+            preciodescuento6=(manaos/2)*1000*0.30
         else:
             preciodescuento6=((manaos-1)/2)*1000*0.30
 
@@ -82,7 +82,7 @@ class Almacen:
 
         preciofinal=self.precio_final_pre_promos(carrito)
         preciofinaldefinitivo=preciofinal-preciodescuento9-preciodescuento8-preciodescuento7-preciodescuento6-preciodescuento5-preciodescuento4-preciodescuento3-preciodescuento2-preciodescuento1
-
+        return preciofinaldefinitivo
 
 
         

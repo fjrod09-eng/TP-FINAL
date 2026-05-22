@@ -15,7 +15,7 @@ class Carrito:
             print("Producto no encontrado")
         else: 
             print("Producto encontrado")
-            print(f"Nombre del producto: {product.get_nombre()}")
+            print(f"Nombre del producto: {product.get_nombre_producto()}")
             print(f"Marca del producto: {product.get_marca()}")
             print(f"Precio del producto: {product.get_precio()}")
             respuesta=input("Desea llevar el producto? ")
@@ -31,7 +31,7 @@ class Carrito:
                             productos_retirados=gondola.descontar_producto(codigo,cantidad)
                             for i in productos_retirados:
                                 self.productos_en_carrito.append(i)
-                                return self.productos_en_carrito
+                            return self.productos_en_carrito
                                 
                     except valorError:
                         print("La cantidad debe ser un entero")
