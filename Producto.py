@@ -31,6 +31,9 @@ class Producto(ABC):
     def get_umbral_minimo(self):
         pass
     
+    @abstractmethod
+    def get_precio_final(self):
+        pass
 
 
     @abstractmethod #metodo abstracto de todas las clases hijas

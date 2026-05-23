@@ -6,9 +6,10 @@ class Carniceria(Producto_por_kilo):
         self.__sector="Carniceria"
         self.__venta_por=venta_por
 
+    def get_sector(self):
+        return self.__sector
     def get_tipo_de_corte(self):
         return self.__tipo_de_corte
-    
     def get_marca(self):
         return self._marca
     def get_nombre_producto(self):
@@ -19,6 +20,7 @@ class Carniceria(Producto_por_kilo):
         return self._codigo
     def get_umbral_minimo(self):
         return self._umbral_minimo
+
     
     def mostrar_en_tablet(self):
         if self.__venta_por == "unidad":
@@ -28,5 +30,5 @@ class Carniceria(Producto_por_kilo):
         else:
 
             print(
-                f"- Sector: {self.__sector}\n - Tipo de corte: {self.__tipo_de_corte}\n- Precio por kg: ${self.get_precio()}\n- Peso real: {self.get_peso()} kg\n- Precio final: ${self.calcular_precio()}")
+                f"- Sector: {self.__sector}\n - Tipo de corte: {self.__tipo_de_corte}\n- Precio por kg: ${self.get_precio()}\n- Peso real: {self.get_peso()} kg\n- Precio final: ${self.get_precio_final()}")
             

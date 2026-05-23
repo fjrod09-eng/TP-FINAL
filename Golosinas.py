@@ -14,12 +14,13 @@ class Golosinas(Producto):
         return self._precio
     def get_codigo(self):
         return self._codigo
-
     def get_umbral_minimo(self):
         return self._umbral_minimo
+    def get_precio_final(self):
+        return self.get_precio()
 
     def mostrar_en_tablet(self):
 
-        print( f"-Góndola: {self.__sector}\n -Producto: {self.get_nombre_producto()}\n -Marca: {self.get_marca()}\n -Precio: {self.get_precio}")
+        print( f"-Góndola: {self.__sector}\n -Producto: {self.get_nombre_producto()}\n -Marca: {self.get_marca()}\n -Precio: {self.get_precio()}")
 
     

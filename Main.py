@@ -1,3 +1,10 @@
+from Almacen import *
+from Inventario import *
+from Gondola import *
+from Deposito import *
+from Proveedor import *
+from Carrito import *
+
 from Galletitas import *
 from Gaseosas import *
 from Golosinas import *
@@ -7,62 +14,50 @@ from Carniceria import *
 from Verduleria import *
 from Fiambreria import *
 
-from Gondola import *
-from Deposito import *
-from Inventario import *
-from Proveedor import *
-from Carrito import *
-from Almacen import *
 
-
-def crear_unidades(clase_producto, cantidad, *args, **kwargs):
+def crear_varias_unidades(clase, cantidad, *args, **kwargs):
     lista = []
 
     for i in range(cantidad):
-        producto = clase_producto(*args, **kwargs)
+        producto = clase(*args, **kwargs)
         lista.append(producto)
 
     return lista
 
 
-def cargar_inventario(inventario, productos_referencia):
-    for producto in productos_referencia:
-        inventario.agregar_producto_a_inventario(producto)
+def cargar_inventario(inventario, lista_productos):
+    codigos_cargados = []
+
+    for producto in lista_productos:
+        if producto.get_codigo() not in codigos_cargados:
+            inventario.agregar_producto_a_inventario(producto)
+            codigos_cargados.append(producto.get_codigo())
 
 
-def mostrar_menu_gondolas():
-    print("\n========== GÓNDOLAS DISPONIBLES ==========")
-    print("1. Galletitas")
-    print("2. Gaseosas")
-    print("3. Perfumería")
-    print("4. Golosinas")
-    print("5. Electrodomésticos")
-    print("6. Carnicería")
-    print("7. Verdulería")
-    print("8. Fiambrería")
-    print("0. Volver")
+def mostrar_menu():
+    print("\n========== MENÚ PRINCIPAL ==========")
+    print("1. Ver góndola de galletitas")
+    print("2. Ver góndola de gaseosas")
+    print("3. Ver góndola de golosinas")
+    print("4. Ver góndola de perfumería")
+    print("5. Ver góndola de electrodomésticos")
+    print("6. Ver góndola de carnicería")
+    print("7. Ver góndola de verdulería")
+    print("8. Ver góndola de fiambrería")
+    print("9. Ver carrito")
+    print("10. Finalizar compra")
+    print("0. Salir sin comprar")
 
 
-def mostrar_menu_principal():
-    print("\n========== SUPERMARKET IOT ==========")
-    print("1. Ver productos de una góndola")
-    print("2. Agregar productos al carrito")
-    print("3. Ver carrito")
-    print("4. Ver total a pagar")
-    print("5. Probar reposición desde depósito")
-    print("6. Probar pedido a proveedor")
-    print("0. Salir")
-
-
-def obtener_gondola_por_opcion(opcion, gondolas):
+def elegir_gondola(opcion, gondolas):
     if opcion == "1":
         return gondolas["galletitas"]
     elif opcion == "2":
         return gondolas["gaseosas"]
     elif opcion == "3":
-        return gondolas["perfumeria"]
-    elif opcion == "4":
         return gondolas["golosinas"]
+    elif opcion == "4":
+        return gondolas["perfumeria"]
     elif opcion == "5":
         return gondolas["electrodomesticos"]
     elif opcion == "6":
@@ -75,245 +70,118 @@ def obtener_gondola_por_opcion(opcion, gondolas):
         return None
 
 
-def ver_productos_de_gondola(gondolas):
-    mostrar_menu_gondolas()
-
-    opcion = input("Seleccione una góndola: ")
-
-    if opcion == "0":
-        return
-
-    gondola = obtener_gondola_por_opcion(opcion, gondolas)
-
-    if gondola is None:
-        print("Opción inválida.")
-    else:
-        gondola.mostrar_productos()
-
-
-def agregar_producto_al_carrito(carrito, inventario, gondolas, almacen, deposito, proveedor):
-    mostrar_menu_gondolas()
-
-    opcion = input("Seleccione la góndola desde donde quiere comprar: ")
-
-    if opcion == "0":
-        return
-
-    gondola = obtener_gondola_por_opcion(opcion, gondolas)
-
-    if gondola is None:
-        print("Opción inválida.")
-        return
-
-    print("\nProductos disponibles en esta góndola:")
-    gondola.mostrar_productos()
-
-    codigo = input("\nIngrese el código del producto que quiere llevar: ")
-
-    producto = inventario.buscar_prod_por_cod(codigo)
-
-    if producto is None:
-        print("No existe un producto registrado con ese código.")
-        return
-
-    print("\nProducto encontrado:")
-    print(f"Nombre: {producto.get_nombre_producto()}")
-    print(f"Marca: {producto.get_marca()}")
-    print(f"Precio: ${producto.get_precio()}")
-
-    try:
-        cantidad = int(input("Ingrese la cantidad que quiere llevar: "))
-
-        if cantidad <= 0:
-            print("La cantidad debe ser mayor a cero.")
-            return
-
-    except ValueError:
-        print("La cantidad debe ser un número entero.")
-        return
-
-    productos_retirados = gondola.descontar_producto(codigo, cantidad)
-
-    if len(productos_retirados) == 0:
-        print("No se agregó nada al carrito.")
-        return
-
-    for producto_retirado in productos_retirados:
-        carrito.productos_en_carrito.append(producto_retirado)
-
-    print(f"\nSe agregaron {len(productos_retirados)} productos al carrito.")
-
-    total_actual = almacen.precio_final_con_promos(carrito, inventario, gondola )
-
-    print(f"Pantalla OLED del carrito - Total actual con promociones: ${total_actual}")
-
-    stock_actual_gondola = gondola.mostrar_stock_por_codigo(codigo)
-
-    print(f"Stock actual en góndola para el código {codigo}: {stock_actual_gondola}")
-
-    if stock_actual_gondola == 0:
-        print("\nLa góndola quedó sin stock. Se intenta reponer desde depósito.")
-
-        inventario.reponer_desde_deposito(
-            deposito,
-            gondola,
-            producto.get_umbral_minimo(),
-            codigo
-        )
-
-    inventario.generar_pedido(
-        producto,
-        proveedor,
-        gondola,
-        deposito
-    )
-
-
-def ver_carrito(carrito):
-    print("\n========== CARRITO ==========")
-
-    if len(carrito.productos_en_carrito) == 0:
-        print("El carrito está vacío.")
-        return
-
-    contador = 1
-
-    for producto in carrito.productos_en_carrito:
-        print(
-            f"{contador}. Código: {producto.get_codigo()} | "
-            f"Producto: {producto.get_nombre_producto()} | "
-            f"Marca: {producto.get_marca()} | "
-            f"Precio: ${producto.get_precio()}"
-        )
-
-        contador += 1
-
-
-def ver_total(carrito, almacen, inventario, gondola):
-    print("\n========== TOTAL A PAGAR ==========")
-
-    if len(carrito.productos_en_carrito) == 0:
-        print("El carrito está vacío.")
-        return
-
-    total_sin_promos = almacen.precio_final_pre_promos(carrito, inventario, gondola)
-    total_con_promos = almacen.precio_final_con_promos(carrito, inventario, gondola)
-
-    print(f"Total sin promociones: ${total_sin_promos}")
-    print(f"Total con promociones: ${total_con_promos}")
-
-
-def probar_reposicion(gondolas, deposito, inventario):
-    print("\n========== PRUEBA DE REPOSICIÓN ==========")
-    print("Se probará con Manaos Naranja, código 006.")
-
-    gondola_gaseosas = gondolas["gaseosas"]
-
-    stock_actual = gondola_gaseosas.mostrar_stock_por_codigo("006")
-
-    print(f"Stock inicial de Manaos en góndola: {stock_actual}")
-    print(f"Stock inicial de Manaos en depósito: {deposito.contar_deposito('006')}")
-
-    if stock_actual > 0:
-        gondola_gaseosas.descontar_producto("006", stock_actual)
-
-    print(f"Stock luego de vaciar góndola: {gondola_gaseosas.mostrar_stock_por_codigo('006')}")
-
-    inventario.reponer_desde_deposito(
-        deposito,
-        gondola_gaseosas,
-        3,
-        "006"
-    )
-
-    print(f"Stock final de Manaos en góndola: {gondola_gaseosas.mostrar_stock_por_codigo('006')}")
-    print(f"Stock final de Manaos en depósito: {deposito.contar_deposito('006')}")
-
-
-def probar_pedido_proveedor(gondolas, deposito, inventario, proveedor):
-    print("\n========== PRUEBA DE PEDIDO A PROVEEDOR ==========")
-    print("Se probará con Manaos Naranja, código 006.")
-
-    producto = inventario.buscar_prod_por_cod("006")
-
-    if producto is None:
-        print("No se encontró el producto.")
-        return
-
-    inventario.generar_pedido(
-        producto,
-        proveedor,
-        gondolas["gaseosas"],
-        deposito
-    )
-
-
 def main():
+
+    print("========== INICIO DEL SISTEMA ==========")
 
     almacen = Almacen()
     inventario = Inventario()
     proveedor = Proveedor("Proveedor Central")
     carrito = Carrito()
 
-    # ======================================================
-    # CREACIÓN DE GÓNDOLAS
-    # ======================================================
+    print("\n========== CREANDO PRODUCTOS ==========")
 
-    gondola_galletitas = Gondola(
-        "Galletitas",
-        crear_unidades(Galletitas, 130, "ParNor", "pitusas", 330, "001", 20)
-        + crear_unidades(Galletitas, 100, "Bagley", "sonrisas", 400, "002", 20)
-        + crear_unidades(Galletitas, 20, "Bagley", "porteñitas", 1200, "003", 10)
-    )
+    # -----------------------------
+    # GÓNDOLA 1: GALLETITAS
+    # -----------------------------
+    pitusas_gondola = crear_varias_unidades(Galletitas, 4, "ParNor", "pitusas", 330, "001", 5)
+    sonrisas_gondola = crear_varias_unidades(Galletitas, 3, "Bagley", "sonrisas", 400, "002", 5)
+    portenitas_gondola = crear_varias_unidades(Galletitas, 2, "Bagley", "porteñitas", 1200, "003", 5)
 
-    gondola_gaseosas = Gondola(
-        "Gaseosas",
-        crear_unidades(Gaseosas, 10, "Coca Cola", "coca cola", 3000, "004", 5, 1.25)
-        + crear_unidades(Gaseosas, 500, "Coca Cola", "sprite", 3000, "005", 20, 1.25)
-        + crear_unidades(Gaseosas, 3, "Manaos", "manaos naranja", 1000, "006", 5, 1.25)
-    )
+    pitusas_deposito = crear_varias_unidades(Galletitas, 6, "ParNor", "pitusas", 330, "001", 5)
+    sonrisas_deposito = crear_varias_unidades(Galletitas, 6, "Bagley", "sonrisas", 400, "002", 5)
+    portenitas_deposito = crear_varias_unidades(Galletitas, 6, "Bagley", "porteñitas", 1200, "003", 5)
 
-    gondola_perfumeria = Gondola(
-        "Perfumeria",
-        crear_unidades(Perfumeria, 900, "Ayudin", "lavandina", 900, "007", 50, 1.5)
-        + crear_unidades(Perfumeria, 50, "Zorro", "jabon en polvo", 900, "008", 10, 0.4)
-        + crear_unidades(Perfumeria, 30, "Nivea", "jabon tocador", 200, "009", 10, 0.125)
-    )
+    # -----------------------------
+    # GÓNDOLA 2: GASEOSAS
+    # -----------------------------
+    coca_gondola = crear_varias_unidades(Gaseosas, 3, "Coca Cola", "coca cola", 3000, "004", 5, 2.25)
+    sprite_gondola = crear_varias_unidades(Gaseosas, 3, "Sprite", "sprite", 3000, "005", 5, 2.25)
+    manaos_gondola = crear_varias_unidades(Gaseosas, 2, "Manaos", "manaos naranja", 1000, "006", 5, 2.25)
 
-    gondola_golosinas = Gondola(
-        "Golosinas",
-        crear_unidades(Golosinas, 10000, "Arcor", "caramelos fizz", 200, "010", 100)
-        + crear_unidades(Golosinas, 10000, "Arcor", "caramelos masticables frutales", 100, "011", 100)
-        + crear_unidades(Golosinas, 10000, "Arcor", "caramelos de miel", 75, "012", 100)
-    )
+    coca_deposito = crear_varias_unidades(Gaseosas, 8, "Coca Cola", "coca cola", 3000, "004", 5, 2.25)
+    sprite_deposito = crear_varias_unidades(Gaseosas, 8, "Sprite", "sprite", 3000, "005", 5, 2.25)
+    manaos_deposito = crear_varias_unidades(Gaseosas, 8, "Manaos", "manaos naranja", 1000, "006", 5, 2.25)
 
-    gondola_electrodomesticos = Gondola(
-        "Electrodomesticos",
-        crear_unidades(Electrodomesticos, 10, "Electrolux", "freidora de aire", 100000, "020", 2)
-        + crear_unidades(Electrodomesticos, 25, "Bluesky", "pava electrica", 45000, "021", 3)
-        + crear_unidades(Electrodomesticos, 15, "Mandine", "cafetera", 50000, "022", 3)
-    )
+    # -----------------------------
+    # GÓNDOLA 3: PERFUMERÍA
+    # -----------------------------
+    lavandina_gondola = crear_varias_unidades(Perfumeria, 3, "Ayudin", "lavandina", 900, "007", 5, 1.5)
+    zorro_gondola = crear_varias_unidades(Perfumeria, 3, "Zorro", "jabon en polvo", 900, "008", 5, 0.4)
+    jabon_gondola = crear_varias_unidades(Perfumeria, 3, "Nivea", "jabon tocador", 200, "009", 5, 0.125)
 
-    gondola_carniceria = Gondola(
-        "Carniceria",
-        crear_unidades(Carniceria, 5, "Swift", "asado", 12000, "030", 3, 2.5, "asado", "kilo")
-        + crear_unidades(Carniceria, 5, "Swift", "vacio", 11000, "031", 3, 2, "vacio", "kilo")
-        + crear_unidades(Carniceria, 20, "Paladini", "chorizo", 800, "032", 5, venta_por="unidad")
-    )
+    lavandina_deposito = crear_varias_unidades(Perfumeria, 8, "Ayudin", "lavandina", 900, "007", 5, 1.5)
+    zorro_deposito = crear_varias_unidades(Perfumeria, 8, "Zorro", "jabon en polvo", 900, "008", 5, 0.4)
+    jabon_deposito = crear_varias_unidades(Perfumeria, 8, "Nivea", "jabon tocador", 200, "009", 5, 0.125)
 
-    gondola_verduleria = Gondola(
-        "Verduleria",
-        crear_unidades(Verduleria, 40, "Central", "papa", 900, "040", 5, 2)
-        + crear_unidades(Verduleria, 25, "Central", "tomate", 1200, "041", 5, 1.5)
-        + crear_unidades(Verduleria, 30, "Central", "manzana", 1500, "042", 5, 1)
-    )
+    # -----------------------------
+    # GÓNDOLA 4: GOLOSINAS
+    # -----------------------------
+    fizz_gondola = crear_varias_unidades(Golosinas, 5, "Arcor", "caramelos fizz", 200, "010", 5)
+    masticables_gondola = crear_varias_unidades(Golosinas, 5, "Arcor", "caramelos masticables frutales", 100, "011", 5)
+    miel_gondola = crear_varias_unidades(Golosinas, 5, "Arcor", "caramelos de miel", 75, "012", 5)
 
-    gondola_fiambreria = Gondola(
-        "Fiambreria",
-        crear_unidades(Fiambreria, 10, "Paladini", "jamon", 6000, "050", 4, 0.5, "jamon cocido")
-        + crear_unidades(Fiambreria, 10, "La Paulina", "queso", 7000, "051", 4, 0.4, "queso cremoso")
-        + crear_unidades(Fiambreria, 10, "Tandil", "salame", 9000, "052", 4, 0.3, "salame")
-    )
+    fizz_deposito = crear_varias_unidades(Golosinas, 10, "Arcor", "caramelos fizz", 200, "010", 5)
+    masticables_deposito = crear_varias_unidades(Golosinas, 10, "Arcor", "caramelos masticables frutales", 100, "011", 5)
+    miel_deposito = crear_varias_unidades(Golosinas, 10, "Arcor", "caramelos de miel", 75, "012", 5)
+
+    # -----------------------------
+    # GÓNDOLA 5: ELECTRODOMÉSTICOS
+    # -----------------------------
+    freidora_gondola = crear_varias_unidades(Electrodomesticos, 2, "Electrolux", "freidora de aire", 100000, "013", 2)
+    pava_gondola = crear_varias_unidades(Electrodomesticos, 2, "Bluesky", "pava electrica", 45000, "014", 2)
+    cafetera_gondola = crear_varias_unidades(Electrodomesticos, 2, "Mandine", "cafetera", 50000, "015", 2)
+
+    freidora_deposito = crear_varias_unidades(Electrodomesticos, 5, "Electrolux", "freidora de aire", 100000, "013", 2)
+    pava_deposito = crear_varias_unidades(Electrodomesticos, 5, "Bluesky", "pava electrica", 45000, "014", 2)
+    cafetera_deposito = crear_varias_unidades(Electrodomesticos, 5, "Mandine", "cafetera", 50000, "015", 2)
+
+    # -----------------------------
+    # GÓNDOLA 6: CARNICERÍA
+    # -----------------------------
+    asado_gondola = crear_varias_unidades(Carniceria, 2, "La Anónima", "asado", 9000, "016", 2, 1.5, "asado", "kilo")
+    vacio_gondola = crear_varias_unidades(Carniceria, 2, "La Anónima", "vacio", 11000, "017", 2, 1.2, "vacio", "kilo")
+    chorizo_gondola = crear_varias_unidades(Carniceria, 3, "Paladini", "chorizo", 1200, "018", 2, None, None, "unidad")
+    morcilla_gondola = crear_varias_unidades(Carniceria, 3, "Paladini", "morcilla", 1000, "019", 2, None, None, "unidad")
+
+    asado_deposito = crear_varias_unidades(Carniceria, 4, "La Anónima", "asado", 9000, "016", 2, 1.5, "asado", "kilo")
+    vacio_deposito = crear_varias_unidades(Carniceria, 4, "La Anónima", "vacio", 11000, "017", 2, 1.2, "vacio", "kilo")
+    chorizo_deposito = crear_varias_unidades(Carniceria, 5, "Paladini", "chorizo", 1200, "018", 2, None, None, "unidad")
+    morcilla_deposito = crear_varias_unidades(Carniceria, 5, "Paladini", "morcilla", 1000, "019", 2, None, None, "unidad")
+
+    # -----------------------------
+    # GÓNDOLA 7: VERDULERÍA
+    # -----------------------------
+    papa_gondola = crear_varias_unidades(Verduleria, 3, "Sin marca", "papa", 1200, "020", 3, 1)
+    tomate_gondola = crear_varias_unidades(Verduleria, 3, "Sin marca", "tomate", 1800, "021", 3, 1)
+    manzana_gondola = crear_varias_unidades(Verduleria, 3, "Sin marca", "manzana", 2500, "022", 3, 1)
+
+    papa_deposito = crear_varias_unidades(Verduleria, 6, "Sin marca", "papa", 1200, "020", 3, 1)
+    tomate_deposito = crear_varias_unidades(Verduleria, 6, "Sin marca", "tomate", 1800, "021", 3, 1)
+    manzana_deposito = crear_varias_unidades(Verduleria, 6, "Sin marca", "manzana", 2500, "022", 3, 1)
+
+    # -----------------------------
+    # GÓNDOLA 8: FIAMBRERÍA
+    # -----------------------------
+    jamon_gondola = crear_varias_unidades(Fiambreria, 2, "Paladini", "jamon", 8500, "023", 2, 0.3, "jamon")
+    queso_gondola = crear_varias_unidades(Fiambreria, 2, "La Paulina", "queso", 7800, "024", 2, 0.4, "queso")
+    salame_gondola = crear_varias_unidades(Fiambreria, 2, "Tandil", "salame", 12000, "025", 2, 0.25, "salame")
+
+    jamon_deposito = crear_varias_unidades(Fiambreria, 5, "Paladini", "jamon", 8500, "023", 2, 0.3, "jamon")
+    queso_deposito = crear_varias_unidades(Fiambreria, 5, "La Paulina", "queso", 7800, "024", 2, 0.4, "queso")
+    salame_deposito = crear_varias_unidades(Fiambreria, 5, "Tandil", "salame", 12000, "025", 2, 0.25, "salame")
+
+    # -----------------------------
+    # CREAR GÓNDOLAS
+    # -----------------------------
+    gondola_galletitas = Gondola("Galletitas", pitusas_gondola + sonrisas_gondola + portenitas_gondola)
+    gondola_gaseosas = Gondola("Gaseosas", coca_gondola + sprite_gondola + manaos_gondola)
+    gondola_perfumeria = Gondola("Perfumeria", lavandina_gondola + zorro_gondola + jabon_gondola)
+    gondola_golosinas = Gondola("Golosinas", fizz_gondola + masticables_gondola + miel_gondola)
+    gondola_electrodomesticos = Gondola("Electrodomesticos", freidora_gondola + pava_gondola + cafetera_gondola)
+    gondola_carniceria = Gondola("Carniceria", asado_gondola + vacio_gondola + chorizo_gondola + morcilla_gondola)
+    gondola_verduleria = Gondola("Verduleria", papa_gondola + tomate_gondola + manzana_gondola)
+    gondola_fiambreria = Gondola("Fiambreria", jamon_gondola + queso_gondola + salame_gondola)
 
     gondolas = {
         "galletitas": gondola_galletitas,
@@ -326,94 +194,105 @@ def main():
         "fiambreria": gondola_fiambreria
     }
 
-    # ======================================================
-    # CREACIÓN DE DEPÓSITO
-    # ======================================================
-
-    deposito = Deposito(
-        crear_unidades(Galletitas, 20, "ParNor", "pitusas", 330, "001", 20)
-        + crear_unidades(Gaseosas, 10, "Manaos", "manaos naranja", 1000, "006", 5, 1.25)
-        + crear_unidades(Golosinas, 50, "Arcor", "caramelos fizz", 200, "010", 100)
-        + crear_unidades(Electrodomesticos, 5, "Mandine", "cafetera", 50000, "022", 3)
+    # -----------------------------
+    # CREAR DEPÓSITO GENERAL
+    # -----------------------------
+    productos_deposito = (
+        pitusas_deposito + sonrisas_deposito + portenitas_deposito +
+        coca_deposito + sprite_deposito + manaos_deposito +
+        lavandina_deposito + zorro_deposito + jabon_deposito +
+        fizz_deposito + masticables_deposito + miel_deposito +
+        freidora_deposito + pava_deposito + cafetera_deposito +
+        asado_deposito + vacio_deposito + chorizo_deposito + morcilla_deposito +
+        papa_deposito + tomate_deposito + manzana_deposito +
+        jamon_deposito + queso_deposito + salame_deposito
     )
 
-    # ======================================================
-    # CARGA DE INVENTARIO
-    # ======================================================
+    deposito = Deposito(productos_deposito)
 
-    productos_referencia = [
-        Galletitas("ParNor", "pitusas", 330, "001", 20),
-        Galletitas("Bagley", "sonrisas", 400, "002", 20),
-        Galletitas("Bagley", "porteñitas", 1200, "003", 10),
-        Gaseosas("Coca Cola", "coca cola", 3000, "004", 5, 1.25),
-        Gaseosas("Coca Cola", "sprite", 3000, "005", 20, 1.25),
-        Gaseosas("Manaos", "manaos naranja", 1000, "006", 5, 1.25),
-        Perfumeria("Ayudin", "lavandina", 900, "007", 50, 1.5),
-        Perfumeria("Zorro", "jabon en polvo", 900, "008", 10, 0.4),
-        Perfumeria("Nivea", "jabon tocador", 200, "009", 10, 0.125),
-        Golosinas("Arcor", "caramelos fizz", 200, "010", 100),
-        Golosinas("Arcor", "caramelos masticables frutales", 100, "011", 100),
-        Golosinas("Arcor", "caramelos de miel", 75, "012", 100),
-        Electrodomesticos("Electrolux", "freidora de aire", 100000, "020", 2),
-        Electrodomesticos("Bluesky", "pava electrica", 45000, "021", 3),
-        Electrodomesticos("Mandine", "cafetera", 50000, "022", 3),
-        Carniceria("Swift", "asado", 12000, "030", 3, 2.5, "asado", "kilo"),
-        Carniceria("Swift", "vacio", 11000, "031", 3, 2, "vacio", "kilo"),
-        Carniceria("Paladini", "chorizo", 800, "032", 5, venta_por="unidad"),
-        Verduleria("Central", "papa", 900, "040", 5, 2),
-        Verduleria("Central", "tomate", 1200, "041", 5, 1.5),
-        Verduleria("Central", "manzana", 1500, "042", 5, 1),
-        Fiambreria("Paladini", "jamon", 6000, "050", 4, 0.5, "jamon cocido"),
-        Fiambreria("La Paulina", "queso", 7000, "051", 4, 0.4, "queso cremoso"),
-        Fiambreria("Tandil", "salame", 9000, "052", 4, 0.3, "salame")
-    ]
+    # -----------------------------
+    # CARGAR INVENTARIO
+    # -----------------------------
+    todos_los_productos_gondola = (
+        pitusas_gondola + sonrisas_gondola + portenitas_gondola +
+        coca_gondola + sprite_gondola + manaos_gondola +
+        lavandina_gondola + zorro_gondola + jabon_gondola +
+        fizz_gondola + masticables_gondola + miel_gondola +
+        freidora_gondola + pava_gondola + cafetera_gondola +
+        asado_gondola + vacio_gondola + chorizo_gondola + morcilla_gondola +
+        papa_gondola + tomate_gondola + manzana_gondola +
+        jamon_gondola + queso_gondola + salame_gondola
+    )
 
-    cargar_inventario(inventario, productos_referencia)
+    cargar_inventario(inventario, todos_los_productos_gondola)
 
-    print("\nSistema SuperMarket IoT iniciado correctamente.")
+    print("\nSistema cargado correctamente.")
 
-    # ======================================================
-    # MENÚ PRINCIPAL
-    # ======================================================
+    # -----------------------------
+    # PRUEBA AUTOMÁTICA DE TABLET
+    # -----------------------------
+    print("\n========== PRUEBA DE MOSTRAR EN TABLET ==========")
+    pitusas_gondola[0].mostrar_en_tablet()
+    coca_gondola[0].mostrar_en_tablet()
+    lavandina_gondola[0].mostrar_en_tablet()
+    asado_gondola[0].mostrar_en_tablet()
+    chorizo_gondola[0].mostrar_en_tablet()
+    papa_gondola[0].mostrar_en_tablet()
+    jamon_gondola[0].mostrar_en_tablet()
 
+    # -----------------------------
+    # MENÚ DE COMPRA
+    # -----------------------------
     seguir = True
 
     while seguir:
-        mostrar_menu_principal()
+        mostrar_menu()
+        opcion = input("Ingrese una opción: ").strip()
 
-        opcion = input("Ingrese una opción: ")
+        if opcion in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+            gondola_elegida = elegir_gondola(opcion, gondolas)
 
-        if opcion == "1":
-            ver_productos_de_gondola(gondolas)
+            print("\n========== PRODUCTOS DISPONIBLES ==========")
+            gondola_elegida.mostrar_productos()
 
-        elif opcion == "2":
-            agregar_producto_al_carrito(
-                carrito,
-                inventario,
-                gondolas,
-                almacen,
-                deposito,
-                proveedor
-            )
+            print("\n========== ESCANEAR PRODUCTO ==========")
+            productos_vendidos = carrito.escanear_codigo(inventario, gondola_elegida)
 
-        elif opcion == "3":
-            ver_carrito(carrito)
+            if len(productos_vendidos) > 0:
+                producto_vendido = productos_vendidos[0]
 
-        elif opcion == "4":
-            ver_total(carrito, almacen, inventario, gondola_galletitas)
+                print("\n========== CONTROL AUTOMÁTICO DE STOCK ==========")
+                inventario.controlar_stock_despues_de_venta(
+                    producto_vendido,
+                    proveedor,
+                    gondola_elegida,
+                    deposito
+                )
 
-        elif opcion == "5":
-            probar_reposicion(gondolas, deposito, inventario)
+        elif opcion == "9":
+            carrito.mostrar_carrito()
 
-        elif opcion == "6":
-            probar_pedido_proveedor(gondolas, deposito, inventario, proveedor)
+        elif opcion == "10":
+            print("\n========== FINALIZAR COMPRA ==========")
+
+            carrito.mostrar_carrito()
+
+            total_sin_promos = almacen.precio_final_pre_promos(carrito.productos_en_carrito)
+            total_con_promos = almacen.precio_final_con_promos(carrito.productos_en_carrito)
+
+            print(f"\nTotal sin promociones: ${total_sin_promos}")
+            print(f"Total con promociones: ${total_con_promos}")
+            print("Gracias por comprar en el supermercado.")
+
+            seguir = False
 
         elif opcion == "0":
-            print("\nSaliendo del sistema.")
+            print("Saliste del sistema sin finalizar la compra.")
             seguir = False
 
         else:
-            print("Opción inválida.")
+            print("Opción inválida. Intente nuevamente.")
 
 
-main()
+if __name__ == "__main__":
+    main()

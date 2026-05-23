@@ -15,16 +15,15 @@ class Almacen:
     def __init__(self):
         self.cantidad_productos=Counter()
     
-    def precio_final_pre_promos(self,carrito,inventario,gondola):
+    def precio_final_pre_promos(self,lista_productos):
         precio_final=0
-        carritito=carrito.escanear_codigo(inventario,gondola)
-        for i in carritito:
-            precio_final+=i.get_precio()
+        for i in lista_productos:
+            precio_final+=i.get_precio_final()
         return precio_final
         
-    def precio_final_con_promos(self,carrito,inventario,gondola):
-        carritito=carrito.escanear_codigo(inventario,gondola)
-        for i in carritito:
+    def precio_final_con_promos(self,lista_productos):
+        self.reiniciar_sistema()
+        for i in lista_productos:
             if i.get_sector()=="Galletitas":
                 self.cantidad_productos[i.get_codigo()]+=1
 
@@ -81,7 +80,7 @@ class Almacen:
         preciodescuento8=(zorro*900)/2
         preciodescuento9=(jabon*200)/2
 
-        preciofinal=self.precio_final_pre_promos(carritito, inventario, gondola)
+        preciofinal=self.precio_final_pre_promos(lista_productos)
         preciofinaldefinitivo=preciofinal-preciodescuento9-preciodescuento8-preciodescuento7-preciodescuento6-preciodescuento5-preciodescuento4-preciodescuento3-preciodescuento2-preciodescuento1
         return preciofinaldefinitivo
     

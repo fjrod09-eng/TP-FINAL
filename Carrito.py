@@ -8,11 +8,19 @@ class Carrito:
 
     def escanear_codigo(self,inventario,gondola):
         
-        codigo=input("Ingrese el codigo del producto a buscar: ")
+        codigo=input("Ingrese el codigo del producto a buscar: ").strip()
         product=inventario.buscar_prod_por_cod(codigo)
 
         if product is None:
             print("Producto no encontrado")
+            return []
+
+        
+        if product.get_sector() != gondola.get_sector():
+            print(f"ERROR: El producto {product.get_nombre_producto()} pertenece a {product.get_sector()}, no a {gondola.get_sector()}.")
+            print("No se puede agregar desde esta góndola.")
+            return []
+        
         else: 
             print("Producto encontrado")
             print(f"Nombre del producto: {product.get_nombre_producto()}")
@@ -24,24 +32,45 @@ class Carrito:
                 
                 if respuesta.lower()=="si":
                     try: 
-                        cantidad=int(input("Cuanta cantidad quiere llevar de ese producto: "))
-                        if type(cantidad)== type(1.1):
+                        cantidad=int(input("Cuanta cantidad quiere llevar de ese producto: ").strip())
+                        if  cantidad<=0:
                             raise valorError
+
                         else: 
                             productos_retirados=gondola.descontar_producto(codigo,cantidad)
                             for i in productos_retirados:
                                 self.productos_en_carrito.append(i)
-                            return self.productos_en_carrito
+
+
+                            return productos_retirados
+                        
                                 
+                    except ValueError:
+                        print("La cantidad debe ser un entero ")
+                        return []
+                        
                     except valorError:
-                        print("La cantidad debe ser un entero")
+                        print("La cantidad debe ser mayor a 0 ")
+                        return []
                 elif respuesta.lower()=="no":
-                    return
-                else:
-                    if respuesta.lower()!="si" and respuesta.lower()!="no": 
+                    print("Producto no agregado al carrito")
+                    return []
+                
+
+                else: 
                         raise siError
             except siError:
                 print("Palabra no valida")
+                return []
+
+    def mostrar_carrito(self):
+            print("\n--- PRODUCTOS EN CARRITO ---")
+
+            if len(self.productos_en_carrito) == 0:
+                print("El carrito está vacío.")
+            else:
+                for producto in self.productos_en_carrito:
+                    print(f"{producto.get_codigo()} - {producto.get_nombre_producto()} - {producto.get_marca()} - ${producto.get_precio()}")
             
 
 

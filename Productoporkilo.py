@@ -24,5 +24,8 @@ class Producto_por_kilo(Producto):
         else:
             return self.get_precio() * self.__peso
         
+    def get_precio_final(self):
+        return self.calcular_precio()
+        
     def mostrar_en_tablet(self):
         pass
