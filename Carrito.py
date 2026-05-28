@@ -28,30 +28,88 @@ class Carrito:
             print(f"Precio del producto: {product.get_precio()}")
             respuesta=input("Desea llevar el producto? ")
 
-            try:
+            try: #carniceria unidad, carniceria peso y prod normal
                 
                 if respuesta.lower()=="si":
-                    try: 
-                        cantidad=int(input("Cuanta cantidad quiere llevar de ese producto: ").strip())
-                        if  cantidad<=0:
-                            raise valorError
 
-                        else: 
-                            productos_retirados=gondola.descontar_producto(codigo,cantidad)
+                    if product.get_sector() in ["Carniceria", "Verduleria", "Fiambreria"]:
+
+                        if product.get_sector()== "Carniceria" and product.get_venta_por()=="unidad":
+
+                            try: 
+                                cantidad=int(input("Cuantas unidades quiere llevar de ese producto: ").strip())
+                                if  cantidad<=0 :
+                                    raise valorError
+
+                                productos_retirados=gondola.descontar_producto(codigo,cantidad)
+                                for i in productos_retirados:
+                                    self.productos_en_carrito.append(i)
+
+
+                                return productos_retirados
+                        
+                                
+                            except ValueError:
+                                print("La cantidad debe ser un numero entero  ")
+                                return []
+                        
+                            except valorError:
+                                print("La cantidad debe ser mayor a 0 ")
+                                return []
+                    
+                        else:
+                            try:
+                                peso = float(input("Cuantos kg quiere llevar?: ").strip().replace(",", "."))
+
+                                if peso <= 0:
+                                    raise valorError
+
+                                kg_descontados = gondola.descontar_producto_por_peso(codigo, peso)
+
+                                if kg_descontados>0:
+                                
+                                    product.set_peso(kg_descontados)
+                                    self.productos_en_carrito.append(product)
+
+                                    print(f"Se agregó {peso} kg de {product.get_nombre_producto()} al carrito.")
+                                    return [product]
+
+                                else:
+                                    return []
+
+                            except ValueError:
+                                print("El peso debe ser un numero. Ejemplo: 2.5")
+                                return []
+
+                            except valorError:
+                                print("El peso debe ser mayor a 0")
+                                return []
+
+                    else:
+                        try:
+
+                            cantidad = int(input("Cuanta cantidad quiere llevar de ese producto: ").strip())
+
+                            if cantidad <= 0:
+                                raise valorError
+
+                            productos_retirados = gondola.descontar_producto(codigo, cantidad)
+
                             for i in productos_retirados:
                                 self.productos_en_carrito.append(i)
 
-
                             return productos_retirados
-                        
-                                
-                    except ValueError:
-                        print("La cantidad debe ser un entero ")
-                        return []
-                        
-                    except valorError:
-                        print("La cantidad debe ser mayor a 0 ")
-                        return []
+
+                        except ValueError:
+                            print("La cantidad debe ser un numero entero")
+                            return []
+
+                        except valorError:
+                            print("La cantidad debe ser mayor a 0")
+                            return []
+
+
+
                 elif respuesta.lower()=="no":
                     print("Producto no agregado al carrito")
                     return []

@@ -15,11 +15,81 @@ from Verduleria import *
 from Fiambreria import *
 
 
-def crear_varias_unidades(clase, cantidad, *args, **kwargs):
+def crear_galletitas(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo):
     lista = []
 
     for i in range(cantidad):
-        producto = clase(*args, **kwargs)
+        producto = Galletitas(marca, nombre_producto, precio, codigo, umbral_minimo)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_gaseosas(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo, cantidad_litros):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Gaseosas(marca, nombre_producto, precio, codigo, umbral_minimo, cantidad_litros)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_perfumeria(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo, cantidad_litros):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Perfumeria(marca, nombre_producto, precio, codigo, umbral_minimo, cantidad_litros)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_golosinas(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Golosinas(marca, nombre_producto, precio, codigo, umbral_minimo)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_electrodomesticos(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Electrodomesticos(marca, nombre_producto, precio, codigo, umbral_minimo)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_carniceria(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo, peso, tipo_de_corte, venta_por):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Carniceria(marca, nombre_producto, precio, codigo, umbral_minimo, peso, tipo_de_corte, venta_por)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_verduleria(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo, peso):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Verduleria(marca, nombre_producto, precio, codigo, umbral_minimo, peso)
+        lista.append(producto)
+
+    return lista
+
+
+def crear_fiambreria(cantidad, marca, nombre_producto, precio, codigo, umbral_minimo, peso, tipo_de_fiambre):
+    lista = []
+
+    for i in range(cantidad):
+        producto = Fiambreria(marca, nombre_producto, precio, codigo, umbral_minimo, peso, tipo_de_fiambre)
         lista.append(producto)
 
     return lista
@@ -70,7 +140,7 @@ def elegir_gondola(opcion, gondolas):
         return None
 
 
-def crear_sistema():
+def main():
 
     print("========== INICIO DEL SISTEMA ==========")
 
@@ -84,92 +154,86 @@ def crear_sistema():
     # -----------------------------
     # GÓNDOLA 1: GALLETITAS
     # -----------------------------
-    pitusas_gondola = crear_varias_unidades(Galletitas, 4, "ParNor", "pitusas", 330, "001", 5)
-    sonrisas_gondola = crear_varias_unidades(Galletitas, 3, "Bagley", "sonrisas", 400, "002", 5)
-    portenitas_gondola = crear_varias_unidades(Galletitas, 2, "Bagley", "porteñitas", 1200, "003", 5)
+    pitusas_gondola = crear_galletitas(4, "ParNor", "pitusas", 330, "001", 5)
+    sonrisas_gondola = crear_galletitas( 3, "Bagley", "sonrisas", 400, "002", 5)
+    portenitas_gondola = crear_galletitas( 2, "Bagley", "porteñitas", 1200, "003", 5)
 
-    pitusas_deposito = crear_varias_unidades(Galletitas, 6, "ParNor", "pitusas", 330, "001", 5)
-    sonrisas_deposito = crear_varias_unidades(Galletitas, 6, "Bagley", "sonrisas", 400, "002", 5)
-    portenitas_deposito = crear_varias_unidades(Galletitas, 6, "Bagley", "porteñitas", 1200, "003", 5)
+    pitusas_deposito = crear_galletitas( 6, "ParNor", "pitusas", 330, "001", 5)
+    sonrisas_deposito = crear_galletitas( 6, "Bagley", "sonrisas", 400, "002", 5)
+    portenitas_deposito =crear_galletitas( 6, "Bagley", "porteñitas", 1200, "003", 5)
 
     # -----------------------------
     # GÓNDOLA 2: GASEOSAS
     # -----------------------------
-    coca_gondola = crear_varias_unidades(Gaseosas, 3, "Coca Cola", "coca cola", 3000, "004", 5, 2.25)
-    sprite_gondola = crear_varias_unidades(Gaseosas, 3, "Sprite", "sprite", 3000, "005", 5, 2.25)
-    manaos_gondola = crear_varias_unidades(Gaseosas, 2, "Manaos", "manaos naranja", 1000, "006", 5, 2.25)
+    coca_gondola = crear_gaseosas( 3, "Coca Cola", "coca cola", 3000, "004", 5, 2.25)
+    sprite_gondola = crear_gaseosas( 3, "Sprite", "sprite", 3000, "005", 5, 2.25)
+    manaos_gondola = crear_gaseosas( 2, "Manaos", "manaos naranja", 1000, "006", 5, 2.25)
 
-    coca_deposito = crear_varias_unidades(Gaseosas, 8, "Coca Cola", "coca cola", 3000, "004", 5, 2.25)
-    sprite_deposito = crear_varias_unidades(Gaseosas, 8, "Sprite", "sprite", 3000, "005", 5, 2.25)
-    manaos_deposito = crear_varias_unidades(Gaseosas, 8, "Manaos", "manaos naranja", 1000, "006", 5, 2.25)
+    coca_deposito = crear_gaseosas( 8, "Coca Cola", "coca cola", 3000, "004", 5, 2.25)
+    sprite_deposito = crear_gaseosas( 8, "Sprite", "sprite", 3000, "005", 5, 2.25)
+    manaos_deposito = crear_gaseosas( 8, "Manaos", "manaos naranja", 1000, "006", 5, 2.25)
 
     # -----------------------------
     # GÓNDOLA 3: PERFUMERÍA
     # -----------------------------
-    lavandina_gondola = crear_varias_unidades(Perfumeria, 3, "Ayudin", "lavandina", 900, "007", 5, 1.5)
-    zorro_gondola = crear_varias_unidades(Perfumeria, 3, "Zorro", "jabon en polvo", 900, "008", 5, 0.4)
-    jabon_gondola = crear_varias_unidades(Perfumeria, 3, "Nivea", "jabon tocador", 200, "009", 5, 0.125)
+    lavandina_gondola = crear_perfumeria( 3, "Ayudin", "lavandina", 900, "007", 5, 1.5)
+    zorro_gondola = crear_perfumeria( 3, "Zorro", "jabon en polvo", 900, "008", 5, 0.4)
+    jabon_gondola = crear_perfumeria( 3, "Nivea", "jabon tocador", 200, "009", 5, 0.125)
 
-    lavandina_deposito = crear_varias_unidades(Perfumeria, 8, "Ayudin", "lavandina", 900, "007", 5, 1.5)
-    zorro_deposito = crear_varias_unidades(Perfumeria, 8, "Zorro", "jabon en polvo", 900, "008", 5, 0.4)
-    jabon_deposito = crear_varias_unidades(Perfumeria, 8, "Nivea", "jabon tocador", 200, "009", 5, 0.125)
+    lavandina_deposito = crear_perfumeria( 8, "Ayudin", "lavandina", 900, "007", 5, 1.5)
+    zorro_deposito =crear_perfumeria( 8, "Zorro", "jabon en polvo", 900, "008", 5, 0.4)
+    jabon_deposito = crear_perfumeria( 8, "Nivea", "jabon tocador", 200, "009", 5, 0.125)
 
     # -----------------------------
     # GÓNDOLA 4: GOLOSINAS
     # -----------------------------
-    fizz_gondola = crear_varias_unidades(Golosinas, 5, "Arcor", "caramelos fizz", 200, "010", 5)
-    masticables_gondola = crear_varias_unidades(Golosinas, 5, "Arcor", "caramelos masticables frutales", 100, "011", 5)
-    miel_gondola = crear_varias_unidades(Golosinas, 5, "Arcor", "caramelos de miel", 75, "012", 5)
+    fizz_gondola = crear_golosinas( 5, "Arcor", "caramelos fizz", 200, "010", 5)
+    masticables_gondola = crear_golosinas( 5, "Arcor", "caramelos masticables frutales", 100, "011", 5)
+    miel_gondola =crear_golosinas(5, "Arcor", "caramelos de miel", 75, "012", 5)
 
-    fizz_deposito = crear_varias_unidades(Golosinas, 10, "Arcor", "caramelos fizz", 200, "010", 5)
-    masticables_deposito = crear_varias_unidades(Golosinas, 10, "Arcor", "caramelos masticables frutales", 100, "011", 5)
-    miel_deposito = crear_varias_unidades(Golosinas, 10, "Arcor", "caramelos de miel", 75, "012", 5)
+    fizz_deposito = crear_golosinas( 10, "Arcor", "caramelos fizz", 200, "010", 5)
+    masticables_deposito = crear_golosinas( 10, "Arcor", "caramelos masticables frutales", 100, "011", 5)
+    miel_deposito = crear_golosinas( 10, "Arcor", "caramelos de miel", 75, "012", 5)
 
     # -----------------------------
     # GÓNDOLA 5: ELECTRODOMÉSTICOS
     # -----------------------------
-    freidora_gondola = crear_varias_unidades(Electrodomesticos, 2, "Electrolux", "freidora de aire", 100000, "013", 2)
-    pava_gondola = crear_varias_unidades(Electrodomesticos, 2, "Bluesky", "pava electrica", 45000, "014", 2)
-    cafetera_gondola = crear_varias_unidades(Electrodomesticos, 2, "Mandine", "cafetera", 50000, "015", 2)
+    freidora_gondola = crear_electrodomesticos( 2, "Electrolux", "freidora de aire", 100000, "013", 2)
+    pava_gondola = crear_electrodomesticos(2, "Bluesky", "pava electrica", 45000, "014", 2)
+    cafetera_gondola = crear_electrodomesticos( 2, "Mandine", "cafetera", 50000, "015", 2)
 
-    freidora_deposito = crear_varias_unidades(Electrodomesticos, 5, "Electrolux", "freidora de aire", 100000, "013", 2)
-    pava_deposito = crear_varias_unidades(Electrodomesticos, 5, "Bluesky", "pava electrica", 45000, "014", 2)
-    cafetera_deposito = crear_varias_unidades(Electrodomesticos, 5, "Mandine", "cafetera", 50000, "015", 2)
+    freidora_deposito = crear_electrodomesticos( 5, "Electrolux", "freidora de aire", 100000, "013", 2)
+    pava_deposito = crear_electrodomesticos( 5, "Bluesky", "pava electrica", 45000, "014", 2)
+    cafetera_deposito = crear_electrodomesticos( 5, "Mandine", "cafetera", 50000, "015", 2)
 
     # -----------------------------
     # GÓNDOLA 6: CARNICERÍA
     # -----------------------------
-    asado_gondola = crear_varias_unidades(Carniceria, 2, "La Anónima", "asado", 9000, "016", 2, 1.5, "asado", "kilo")
-    vacio_gondola = crear_varias_unidades(Carniceria, 2, "La Anónima", "vacio", 11000, "017", 2, 1.2, "vacio", "kilo")
-    chorizo_gondola = crear_varias_unidades(Carniceria, 3, "Paladini", "chorizo", 1200, "018", 2, None, None, "unidad")
-    morcilla_gondola = crear_varias_unidades(Carniceria, 3, "Paladini", "morcilla", 1000, "019", 2, None, None, "unidad")
+    asado= Carniceria( "La Anónima", "asado", 9000, "016", 2, 0, "asado", "kilo")
+    vacio= Carniceria(  "La Anónima", "vacio", 11000, "017", 2, 0, "vacio", "kilo")
+    chorizo_gondola = crear_carniceria( 3, "Paladini", "chorizo", 1200, "018", 2, None, None, "unidad")
+    morcilla_gondola = crear_carniceria( 3, "Paladini", "morcilla", 1000, "019", 2, None, None, "unidad")
 
-    asado_deposito = crear_varias_unidades(Carniceria, 4, "La Anónima", "asado", 9000, "016", 2, 1.5, "asado", "kilo")
-    vacio_deposito = crear_varias_unidades(Carniceria, 4, "La Anónima", "vacio", 11000, "017", 2, 1.2, "vacio", "kilo")
-    chorizo_deposito = crear_varias_unidades(Carniceria, 5, "Paladini", "chorizo", 1200, "018", 2, None, None, "unidad")
-    morcilla_deposito = crear_varias_unidades(Carniceria, 5, "Paladini", "morcilla", 1000, "019", 2, None, None, "unidad")
+    
+    chorizo_deposito = crear_carniceria( 5, "Paladini", "chorizo", 1200, "018", 2, None, None, "unidad")
+    morcilla_deposito = crear_carniceria( 5, "Paladini", "morcilla", 1000, "019", 2, None, None, "unidad")
 
     # -----------------------------
     # GÓNDOLA 7: VERDULERÍA
     # -----------------------------
-    papa_gondola = crear_varias_unidades(Verduleria, 3, "Sin marca", "papa", 1200, "020", 3, 1)
-    tomate_gondola = crear_varias_unidades(Verduleria, 3, "Sin marca", "tomate", 1800, "021", 3, 1)
-    manzana_gondola = crear_varias_unidades(Verduleria, 3, "Sin marca", "manzana", 2500, "022", 3, 1)
+    papa = Verduleria(  "Sin marca", "papa", 1200, "020", 3, 0)
+    tomate = Verduleria(  "Sin marca", "tomate", 1800, "021", 3, 0)
+    manzana= Verduleria(  "Sin marca", "manzana", 2500, "022", 3, 0)
 
-    papa_deposito = crear_varias_unidades(Verduleria, 6, "Sin marca", "papa", 1200, "020", 3, 1)
-    tomate_deposito = crear_varias_unidades(Verduleria, 6, "Sin marca", "tomate", 1800, "021", 3, 1)
-    manzana_deposito = crear_varias_unidades(Verduleria, 6, "Sin marca", "manzana", 2500, "022", 3, 1)
+
 
     # -----------------------------
     # GÓNDOLA 8: FIAMBRERÍA
     # -----------------------------
-    jamon_gondola = crear_varias_unidades(Fiambreria, 2, "Paladini", "jamon", 8500, "023", 2, 0.3, "jamon")
-    queso_gondola = crear_varias_unidades(Fiambreria, 2, "La Paulina", "queso", 7800, "024", 2, 0.4, "queso")
-    salame_gondola = crear_varias_unidades(Fiambreria, 2, "Tandil", "salame", 12000, "025", 2, 0.25, "salame")
+    jamon = Fiambreria(  "Paladini", "jamon", 8500, "023", 2, 0, "jamon")
+    queso= Fiambreria( "La Paulina", "queso", 7800, "024", 2, 0, "queso")
+    salame= Fiambreria( "Tandil", "salame", 12000, "025", 2, 0, "salame")
 
-    jamon_deposito = crear_varias_unidades(Fiambreria, 5, "Paladini", "jamon", 8500, "023", 2, 0.3, "jamon")
-    queso_deposito = crear_varias_unidades(Fiambreria, 5, "La Paulina", "queso", 7800, "024", 2, 0.4, "queso")
-    salame_deposito = crear_varias_unidades(Fiambreria, 5, "Tandil", "salame", 12000, "025", 2, 0.25, "salame")
 
     # -----------------------------
     # CREAR GÓNDOLAS
@@ -179,9 +243,9 @@ def crear_sistema():
     gondola_perfumeria = Gondola("Perfumeria", lavandina_gondola + zorro_gondola + jabon_gondola)
     gondola_golosinas = Gondola("Golosinas", fizz_gondola + masticables_gondola + miel_gondola)
     gondola_electrodomesticos = Gondola("Electrodomesticos", freidora_gondola + pava_gondola + cafetera_gondola)
-    gondola_carniceria = Gondola("Carniceria", asado_gondola + vacio_gondola + chorizo_gondola + morcilla_gondola)
-    gondola_verduleria = Gondola("Verduleria", papa_gondola + tomate_gondola + manzana_gondola)
-    gondola_fiambreria = Gondola("Fiambreria", jamon_gondola + queso_gondola + salame_gondola)
+    gondola_carniceria = Gondola("Carniceria", [asado, vacio] + chorizo_gondola + morcilla_gondola,{"016":20, "017":15}) #20 kg de asado y 15 de vacio       
+    gondola_verduleria = Gondola("Verduleria", [papa,tomate,manzana],{"020":10,"021":10,"022":10}) #10 kg de papa tomate y manzana
+    gondola_fiambreria = Gondola("Fiambreria", [jamon,queso,salame],{"023":2,"024":2,"025":2}) #2 kg de queso, jamon y salamw
 
     gondolas = {
         "galletitas": gondola_galletitas,
@@ -198,101 +262,74 @@ def crear_sistema():
     # CREAR DEPÓSITO GENERAL
     # -----------------------------
     productos_deposito = (
-        pitusas_deposito + sonrisas_deposito + portenitas_deposito +
-        coca_deposito + sprite_deposito + manaos_deposito +
-        lavandina_deposito + zorro_deposito + jabon_deposito +
-        fizz_deposito + masticables_deposito + miel_deposito +
-        freidora_deposito + pava_deposito + cafetera_deposito +
-        asado_deposito + vacio_deposito + chorizo_deposito + morcilla_deposito +
-        papa_deposito + tomate_deposito + manzana_deposito +
-        jamon_deposito + queso_deposito + salame_deposito
+        pitusas_deposito + sonrisas_deposito + portenitas_deposito +coca_deposito + sprite_deposito + manaos_deposito +lavandina_deposito + zorro_deposito + jabon_deposito +
+        fizz_deposito + masticables_deposito + miel_deposito +freidora_deposito + pava_deposito + cafetera_deposito + chorizo_deposito + morcilla_deposito 
     )
 
-    deposito = Deposito(productos_deposito)
+    deposito = Deposito(productos_deposito,{ "016": 10.0, "017": 8,  "020": 5,  "021": 5, "022": 4, "023": 3, "024": 2,  "025": 2 })
 
     # -----------------------------
     # CARGAR INVENTARIO
     # -----------------------------
     todos_los_productos_gondola = (
-        pitusas_gondola + sonrisas_gondola + portenitas_gondola +
-        coca_gondola + sprite_gondola + manaos_gondola +
-        lavandina_gondola + zorro_gondola + jabon_gondola +
-        fizz_gondola + masticables_gondola + miel_gondola +
-        freidora_gondola + pava_gondola + cafetera_gondola +
-        asado_gondola + vacio_gondola + chorizo_gondola + morcilla_gondola +
-        papa_gondola + tomate_gondola + manzana_gondola +
-        jamon_gondola + queso_gondola + salame_gondola
+        pitusas_gondola + sonrisas_gondola + portenitas_gondola +coca_gondola + sprite_gondola + manaos_gondola +lavandina_gondola + zorro_gondola + jabon_gondola +
+        fizz_gondola + masticables_gondola + miel_gondola +freidora_gondola + pava_gondola + cafetera_gondola +[asado ,vacio] + chorizo_gondola + 
+        morcilla_gondola +[papa , tomate , manzana] +[jamon , queso, salame]
     )
 
     cargar_inventario(inventario, todos_los_productos_gondola)
 
-    print("\nSistema cargado correctamente.")
+   
 
-    # -----------------------------
-    # PRUEBA AUTOMÁTICA DE TABLET
-    # -----------------------------
-    print("\n========== PRUEBA DE MOSTRAR EN TABLET ==========")
-    pitusas_gondola[0].mostrar_en_tablet()
-    coca_gondola[0].mostrar_en_tablet()
-    lavandina_gondola[0].mostrar_en_tablet()
-    asado_gondola[0].mostrar_en_tablet()
-    chorizo_gondola[0].mostrar_en_tablet()
-    papa_gondola[0].mostrar_en_tablet()
-    jamon_gondola[0].mostrar_en_tablet()
-
-    # -----------------------------
-    # MENÚ DE COMPRA
-    # -----------------------------
     seguir = True
-    return gondolas, carrito, inventario, proveedor, deposito, almacen
-    # while seguir:
-    #     mostrar_menu()
-    #     opcion = input("Ingrese una opción: ").strip()
+    #return gondolas, carrito, inventario, proveedor, deposito, almacen
+    while seguir:
+        mostrar_menu()
+        opcion = input("Ingrese una opción: ").strip()
 
-    #     if opcion in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-    #         gondola_elegida = elegir_gondola(opcion, gondolas)
+        if opcion in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+            gondola_elegida = elegir_gondola(opcion, gondolas)
 
-    #         print("\n========== PRODUCTOS DISPONIBLES ==========")
-    #         gondola_elegida.mostrar_productos()
+            print("\n========== PRODUCTOS DISPONIBLES ==========")
+            gondola_elegida.mostrar_productos()
 
-    #         print("\n========== ESCANEAR PRODUCTO ==========")
-    #         productos_vendidos = carrito.escanear_codigo(inventario, gondola_elegida)
+            print("\n========== ESCANEAR PRODUCTO ==========")
+            productos_vendidos = carrito.escanear_codigo(inventario, gondola_elegida)
 
-    #         if len(productos_vendidos) > 0:
-    #             producto_vendido = productos_vendidos[0]
+            if len(productos_vendidos) > 0:
+                producto_vendido = productos_vendidos[0]
 
-    #             print("\n========== CONTROL AUTOMÁTICO DE STOCK ==========")
-    #             inventario.controlar_stock_despues_de_venta(
-    #                 producto_vendido,
-    #                 proveedor,
-    #                 gondola_elegida,
-    #                 deposito
-    #             )
+                print("\n========== CONTROL AUTOMÁTICO DE STOCK ==========")
+                inventario.controlar_stock_despues_de_venta(
+                producto_vendido,
+                proveedor,
+                gondola_elegida,
+                deposito
+                )
 
-    #     elif opcion == "9":
-    #         carrito.mostrar_carrito()
+        elif opcion == "9":
+            carrito.mostrar_carrito()
 
-    #     elif opcion == "10":
-    #         print("\n========== FINALIZAR COMPRA ==========")
+        elif opcion == "10":
+            print("\n========== FINALIZAR COMPRA ==========")
 
-    #         carrito.mostrar_carrito()
+            carrito.mostrar_carrito()
 
-    #         total_sin_promos = almacen.precio_final_pre_promos(carrito.productos_en_carrito)
-    #         total_con_promos = almacen.precio_final_con_promos(carrito.productos_en_carrito)
+            total_sin_promos = almacen.precio_final_pre_promos(carrito.productos_en_carrito)
+            total_con_promos = almacen.precio_final_con_promos(carrito.productos_en_carrito)
 
-    #         print(f"\nTotal sin promociones: ${total_sin_promos}")
-    #         print(f"Total con promociones: ${total_con_promos}")
-    #         print("Gracias por comprar en el supermercado.")
+            print(f"\nTotal sin promociones: ${total_sin_promos}")
+            print(f"Total con promociones: ${total_con_promos}")
+            print("Gracias por comprar en el supermercado.")
 
-    #         seguir = False
+            seguir = False
 
-    #     elif opcion == "0":
-    #         print("Saliste del sistema sin finalizar la compra.")
-    #         seguir = False
+        elif opcion == "0":
+            print("Saliste del sistema sin finalizar la compra.")
+            seguir = False
 
-    #     else:
-    #         print("Opción inválida. Intente nuevamente.")
+        else:
+            print("Opción inválida. Intente nuevamente.")
 
-
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

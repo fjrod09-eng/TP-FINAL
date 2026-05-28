@@ -17,6 +17,8 @@ class Producto_por_kilo(Producto):
         return self._codigo
     def get_umbral_minimo(self):
         return self._umbral_minimo
+    def set_peso(self,nuevo_peso):
+        self.__peso=nuevo_peso
     
     def calcular_precio(self):
         if self.__peso is None:

@@ -1,6 +1,14 @@
 class Deposito: 
-    def __init__(self,lista_de_productos):
+    def __init__(self,lista_de_productos,stock_kilos=None):
         self.__productos=lista_de_productos
+        
+        if stock_kilos is None:
+            self.__stock_kilos={}
+
+        else: 
+            self.__stock_kilos=stock_kilos
+
+
     def contar_deposito(self,codigo):
         cont=0
         for i in self.__productos:
@@ -8,6 +16,38 @@ class Deposito:
                 cont+=1
         
         return cont
+    
+    def agregar_stock_kilos(self, codigo, kilos):
+        self.__stock_kilos[codigo] = kilos
+
+
+    def mostrar_stock_kilos(self, codigo):
+        return self.__stock_kilos.get(codigo, 0)
+
+
+    def descontar_producto_por_peso(self, codigo, peso):
+        stock_disponible = self.mostrar_stock_kilos(codigo)
+
+        if stock_disponible == 0:
+            print("No hay stock disponible en kilos en depósito.")
+            return 0
+
+        if peso > stock_disponible:
+            print(f"No hay {peso} kg disponibles en depósito.")
+            print(f"Stock disponible en depósito: {stock_disponible} kg")
+            return 0
+
+        self.__stock_kilos[codigo] = stock_disponible - peso
+
+        print(f"Se retiraron {peso} kg del depósito.")
+        print(f"Nuevo stock en depósito: {self.__stock_kilos[codigo]} kg")
+
+        return peso
+
+
+    def agregar_stock_kilos_existente(self, codigo, kilos):
+        stock_actual = self.mostrar_stock_kilos(codigo)
+        self.__stock_kilos[codigo] = stock_actual + kilos
     
     def descontar_producto(self,codigo, cantidad):
         stock_disponible=self.contar_deposito(codigo)
@@ -38,6 +78,7 @@ class Deposito:
         for producto in lista_productos:
             self.__productos.append(producto)
     
+
             
             
         

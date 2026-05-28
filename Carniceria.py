@@ -20,6 +20,8 @@ class Carniceria(Producto_por_kilo):
         return self._codigo
     def get_umbral_minimo(self):
         return self._umbral_minimo
+    def get_venta_por(self):
+        return self.__venta_por
 
     
     def mostrar_en_tablet(self):

@@ -2,12 +2,25 @@ from Inventario import *
 from Producto import *
 class Gondola:
 
-    def __init__(self, sector, productos):
+    def __init__(self, sector, productos,stock_kilos=None):
         self.__sector = sector
         self.__productos = productos
 
+        if stock_kilos is None:
+            self.__stock_kilos={}
+        else:
+            self.__stock_kilos=stock_kilos
+    
+
+
     def get_sector(self):
         return self.__sector
+    
+    def agregar_stock_kilos(self, codigo, kilos):
+        self.__stock_kilos[codigo] = kilos
+
+    def mostrar_stock_kilos(self, codigo):
+        return self.__stock_kilos.get(codigo, 0)
     def mostrar_productos(self):
         print(f"Góndola: {self.__sector}")
 
@@ -22,6 +35,45 @@ class Gondola:
                 contador += 1
 
         return contador
+    
+    def agregar_stock_kilos_existente(self, codigo, kilos):
+        if codigo in self.__stock_kilos:
+            self.__stock_kilos[codigo] += kilos
+        else:
+            self.__stock_kilos[codigo] = kilos
+
+        print(f"Se agregaron {kilos} kg a la góndola.")
+        
+    def descontar_producto_por_peso(self, codigo, peso):
+        stock_disponible = self.mostrar_stock_kilos(codigo)
+
+        if stock_disponible == 0:
+            print("No hay stock disponible en kilos.")
+            return 0
+
+        if peso > stock_disponible:
+            print(f"No hay {peso} kg disponibles.")
+            print(f"Stock disponible: {stock_disponible} kg")
+
+            respuesta = input(f"Desea llevar los {stock_disponible} kg disponibles? ").strip().lower()
+
+            if respuesta == "si":
+                peso = stock_disponible
+
+            elif respuesta == "no":
+                print("No se retiro ningun producto de la gondola.")
+                return 0
+
+            else:
+                print("Palabra invalida")
+                return 0
+
+        self.__stock_kilos[codigo] = stock_disponible - peso
+
+        print(f"Se retiraron {peso} kg de la gondola.")
+        print(f"Nuevo stock en gondola: {self.__stock_kilos[codigo]} kg")
+
+        return peso
 
     def descontar_producto(self, codigo, cantidad):
 
