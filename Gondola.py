@@ -21,11 +21,34 @@ class Gondola:
 
     def mostrar_stock_kilos(self, codigo):
         return self.__stock_kilos.get(codigo, 0)
+    
     def mostrar_productos(self):
         print(f"Góndola: {self.__sector}")
 
+        productos_mostrados = []
+
         for producto in self.__productos:
-            print(f"{producto.get_codigo()} \n- {producto.get_nombre_producto()} \n-{producto.get_marca()}\n-${producto.get_precio()}")
+            codigo = producto.get_codigo()
+
+            if codigo not in productos_mostrados:
+                print("--------------------------------")
+                print(f"Producto: {producto.get_nombre_producto()}")
+                print(f"Marca: {producto.get_marca()}")
+                print(f"Código: {producto.get_codigo()}")
+                print(f"Precio: ${producto.get_precio()}")
+
+                if self.__sector in ["Carniceria", "Verduleria", "Fiambreria"]:
+                    if producto.get_sector() == "Carniceria" and producto.get_venta_por() == "unidad":
+                        cantidad = self.contar_producto(codigo)
+                        print(f"Unidades disponibles: {cantidad}")
+                    else:
+                        kilos = self.mostrar_stock_kilos(codigo)
+                        print(f"Kilos disponibles: {kilos} kg")
+                else:
+                    cantidad = self.contar_producto(codigo)
+                    print(f"Unidades disponibles: {cantidad}")
+
+                productos_mostrados.append(codigo)
 
     def contar_producto(self, codigo):
         contador = 0
@@ -43,7 +66,7 @@ class Gondola:
             self.__stock_kilos[codigo] = kilos
 
         print(f"Se agregaron {kilos} kg a la góndola.")
-        
+
     def descontar_producto_por_peso(self, codigo, peso):
         stock_disponible = self.mostrar_stock_kilos(codigo)
 
