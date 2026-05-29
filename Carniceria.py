@@ -5,9 +5,12 @@ class Carniceria(Producto_por_kilo):
         self.__tipo_de_corte=tipo_de_corte
         self.__sector="Carniceria"
         self.__venta_por=venta_por
+        
 
     def get_sector(self):
         return self.__sector
+    def get_peso(self):
+        return self._peso
     def get_tipo_de_corte(self):
         return self.__tipo_de_corte
     def get_marca(self):
@@ -22,6 +25,21 @@ class Carniceria(Producto_por_kilo):
         return self._umbral_minimo
     def get_venta_por(self):
         return self.__venta_por
+    
+    def set_peso(self,nuevo_peso):
+        self._peso=nuevo_peso
+    
+    def calcular_precio(self):
+        if self.get_peso() is None:
+            return self.get_precio()
+        else:
+            return self.get_precio() * self.get_peso()
+        
+    def get_precio_final(self):
+        return self.calcular_precio()
+    
+    def crear_compra_por_peso(self, peso_comprado):
+        return Carniceria(self.get_marca(),self.get_nombre_producto(),self.get_precio(),self.get_codigo(),self.get_umbral_minimo(),peso_comprado,self.__tipo_de_corte,self.__venta_por)
 
     
     def mostrar_en_tablet(self):

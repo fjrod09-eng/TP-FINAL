@@ -1,22 +1,29 @@
 from Producto import *
-class Productoliquido(Producto):
+from abc import ABC , abstractmethod
+class Productoliquido(Producto,ABC):
     def __init__(self, marca, nombre_producto, precio, codigo, umbral_minimo,cantidad_litros):
         super().__init__(marca, nombre_producto, precio, codigo, umbral_minimo)
         self.__cantidad_litros=cantidad_litros
 
+    @abstractmethod
     def get_cantidad_litros(self):
-        return self.__cantidad_litros
+        pass
+    @abstractmethod
     def get_marca(self):
-        return self._marca
+        pass
+    @abstractmethod
     def get_nombre_producto(self):
-        return self._nombre_producto
+        pass
+    @abstractmethod
     def get_precio(self):
-        return self._precio
+        pass
+    @abstractmethod
     def get_codigo(self):
-        return self._codigo
+        pass
+    @abstractmethod
     def get_umbral_minimo(self):
-        return self._umbral_minimo
-    
+        pass
+    @abstractmethod
     def mostrar_en_tablet(self):
         pass
     

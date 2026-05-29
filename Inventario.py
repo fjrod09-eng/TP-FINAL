@@ -137,15 +137,20 @@ class Inventario():
     
         print("Producto no encontrado")
         
-    def buscar_prod_por_cod(self,codigo):
-        
-        for i in self.productos:
-            if i.get_codigo()==codigo:
-                
-                return i
+    def buscar_prod_por_cod(self):
+         while True:
+            codigo = input("Ingrese el código del producto a buscar o 0 para cancelar: ").strip()
+
+            if codigo == "0":
+                return None
+
+            for producto in self.productos:
+                if producto.get_codigo() == codigo:
+                    return producto
+
+            print("Producto no encontrado. Intente nuevamente.")
             
-        print("Producto no encontrado")
-        return None
+        
 
                 
         

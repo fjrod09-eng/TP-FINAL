@@ -3,10 +3,12 @@ class Perfumeria(Productoliquido):
     def __init__(self, marca, nombre_producto, precio, codigo, umbral_minimo, cantidad_litros):
         super().__init__(marca, nombre_producto, precio, codigo, umbral_minimo, cantidad_litros)
         self.__sector="Perfumeria"
+        
     
+    def get_cantidad_litros(self):
+        return self.__cantidad_litros
     def get_sector(self):
         return self.__sector
-    
     def get_marca(self):
         return self._marca
     def get_nombre_producto(self):

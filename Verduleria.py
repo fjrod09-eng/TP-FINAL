@@ -6,6 +6,8 @@ class Verduleria(Producto_por_kilo):
     
     def get_sector(self):
         return self.__sector
+    def get_peso(self):
+        return self._peso
     def get_marca(self):
         return self._marca
     def get_nombre_producto(self):
@@ -17,8 +19,22 @@ class Verduleria(Producto_por_kilo):
     def get_umbral_minimo(self):
         return self._umbral_minimo
     
+    def set_peso(self,nuevo_peso):
+        self._peso=nuevo_peso
+    
+    def calcular_precio(self):
+        if self.get_peso() is None:
+            return self.get_precio()
+        else:
+            return self.get_precio() * self.get_peso()
+        
+    def get_precio_final(self):
+        return self.calcular_precio()
+    
     def mostrar_en_tablet(self):
         print(f"- Sector: {self.__sector}\n -Nombre:{self.get_nombre_producto()}-\n - Precio por kg: ${self.get_precio()}\n - Peso real: {self.get_peso()} kg\n - Precio final: ${self.get_precio_final()}")
 
+    def crear_compra_por_peso(self, peso_comprado):
+        return Verduleria(self.get_marca(),self.get_nombre_producto(),self.get_precio(),self.get_codigo(),self.get_umbral_minimo(),peso_comprado)
 
-#COMO NOS VAN A EVALUAR. si esposibe que ellos agreguen en e main un objeto por ejmplo flyyn puff y que lo mandes a carniceria o si van a ser gente buena. si van a ser malos oreguntar como hcer porwque son infigas las posibilidades .
+
